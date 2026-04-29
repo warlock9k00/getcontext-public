@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentation — Get Context</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; color: #111; background: #fafafa; line-height: 1.65; margin: 0; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; text-decoration: none; color: #111; }
+  nav a { color: #666; text-decoration: none; margin-left: 24px; font-size: 14px; }
+  h1 { font-size: 36px; margin: 0 0 16px; letter-spacing: -0.02em; }
+  h2 { font-size: 22px; margin-top: 40px; letter-spacing: -0.015em; }
+  h3 { font-size: 17px; margin-top: 28px; }
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  a { color: #2c5cff; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+  pre { background: #f4f4f4; padding: 16px; border-radius: 8px; overflow-x: auto; font-size: 13px; line-height: 1.5; }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid #eaeaea; font-size: 13px; color: #666; }
+  .step { background: #fff; border: 1px solid #eaeaea; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="logo" href="/">Get Context</a>
+  <nav>
+    <a href="/docs">Docs</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+  </nav>
+</header>
+
+<h1>Documentation</h1>
+
+<h2>How it works</h2>
+<ol>
+  <li>You install Get Context from Zoom Marketplace and authorize it via OAuth.</li>
+  <li>When a Zoom meeting you host or attend starts, the Service is notified by Zoom.</li>
+  <li>A bot named "Meeting Notes" joins the call as a participant.</li>
+  <li>Audio is recorded for the duration of the meeting.</li>
+  <li>After the meeting ends, the recording is transcribed by Groq Whisper.</li>
+  <li>Anthropic Claude generates a summary, action items, and key decisions.</li>
+  <li>The result is committed to your private GitHub repository as a Markdown file.</li>
+  <li>You receive a Telegram notification (if you opted in) with a link to the file.</li>
+</ol>
+
+<h2>What gets installed</h2>
+<p>Installing Get Context grants the following Zoom OAuth scopes:</p>
+<ul>
+  <li><code>meeting:read:meeting</code> — fetch join URL and password when a meeting starts.</li>
+  <li><code>user:read:user</code> — read your name and email so we can identify your account.</li>
+</ul>
+<p>Get Context also subscribes to two Zoom webhook events:</p>
+<ul>
+  <li><code>meeting.started</code> — to know when to spawn the bot.</li>
+  <li><code>meeting.ended</code> — to know when to start processing.</li>
+</ul>
+
+<h2>What participants see</h2>
+<p>When the bot joins, all participants see:</p>
+<ul>
+  <li>A new participant named <strong>"Meeting Notes"</strong> in the participant list.</li>
+  <li>Zoom's standard recording indicator (red REC dot in the top bar).</li>
+  <li>An audible Zoom announcement that the meeting is being recorded.</li>
+</ul>
+<p>This is by Zoom's design and cannot be disabled. Get Context does not attempt to hide its presence.</p>
+
+<h2>Topic blocklist</h2>
+<p>You can configure topics that should never trigger the bot — useful for personal or therapy meetings. Currently this is configured server-side; a UI is on the roadmap.</p>
+
+<h2>Disconnecting</h2>
+<ol>
+  <li>Open <a href="https://marketplace.zoom.us/user/installed" target="_blank">Zoom Marketplace → Installed Apps</a>.</li>
+  <li>Click "Uninstall" next to Get Context.</li>
+</ol>
+<p>Within 24 hours, all OAuth tokens and webhook payloads are deleted from our infrastructure. Notes already in your GitHub repo are not affected — they remain yours.</p>
+
+<h2>Data flow</h2>
+<pre>Zoom meeting.started
+  → Cloudflare Worker (HMAC verify, fetch meeting URL)
+  → Spawn bot via Attendee SDK on Hetzner VPS (Germany)
+  → Bot joins meeting, records audio to Cloudflare R2 (EU)
+  → meeting.ended
+  → Sidecar pulls recording, transcodes to opus
+  → Groq Whisper Large v3 → transcript with timestamps
+  → Anthropic Claude Haiku → summary, action items, decisions
+  → Commit Markdown to your GitHub repo
+  → Audio deleted within 24 hours
+  → Telegram notification</pre>
+
+<h2>Self-host</h2>
+<p>The full source code is open source and available on GitHub:</p>
+<ul>
+  <li><a href="https://github.com/warlock9k00/meeting-bot" target="_blank">meeting-bot</a> — Cloudflare Worker (gateway and OAuth)</li>
+  <li><a href="https://github.com/warlock9k00/meeting-bot-sidecar" target="_blank">meeting-bot-sidecar</a> — Python processor (Hetzner)</li>
+</ul>
+<p>If you'd rather run your own infrastructure rather than use the hosted Service, the repos contain Docker configurations and step-by-step deployment notes.</p>
+
+<footer>
+  © 2026 Aleksandr Khomich · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/support">Support</a>
+</footer>
+
+</div>
+</body>
+</html>

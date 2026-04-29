@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Policy — Get Context</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; color: #111; background: #fafafa; line-height: 1.65; margin: 0; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; text-decoration: none; color: #111; }
+  nav a { color: #666; text-decoration: none; margin-left: 24px; font-size: 14px; }
+  h1 { font-size: 36px; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .updated { color: #666; font-size: 14px; margin-bottom: 36px; }
+  h2 { font-size: 20px; margin-top: 36px; letter-spacing: -0.015em; }
+  h3 { font-size: 16px; margin-top: 28px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  a { color: #2c5cff; }
+  footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid #eaeaea; font-size: 13px; color: #666; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="logo" href="/">Get Context</a>
+  <nav>
+    <a href="/docs">Docs</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+  </nav>
+</header>
+
+<h1>Privacy Policy</h1>
+<p class="updated">Last updated: 29 April 2026</p>
+
+<p>This policy explains exactly what data Get Context collects, what we do with it, and what control you have. It is written for humans, not lawyers. If anything is unclear, write to <a href="/support">support</a>.</p>
+
+<h2>1. Who we are</h2>
+<p>Get Context ("the Service") is operated by Aleksandr Khomich (the "Operator") as an individual. Contact: <a href="mailto:akhomich.backup@gmail.com">akhomich.backup@gmail.com</a>.</p>
+
+<h2>2. Data we collect</h2>
+
+<h3>2.1 Account data (when you connect Get Context)</h3>
+<ul>
+  <li><strong>Zoom account ID, email, name</strong> — provided by Zoom OAuth so the Service knows which user authorized it.</li>
+  <li><strong>Zoom OAuth access &amp; refresh tokens</strong> — stored encrypted, used only to fetch meeting metadata (join URL, password) when a webhook arrives.</li>
+  <li><strong>Google Calendar access tokens</strong> (if you connect Calendar) — used only to read upcoming meetings so the bot can join on time.</li>
+  <li><strong>Telegram chat ID</strong> (if you opt in) — used to send you "notes are ready" notifications.</li>
+</ul>
+
+<h3>2.2 Meeting data (during the meeting)</h3>
+<ul>
+  <li><strong>Audio recording</strong> — captured by the bot during the meeting via Zoom Meeting SDK.</li>
+  <li><strong>Participant names and join/leave timestamps</strong> — provided by Zoom.</li>
+  <li><strong>Meeting topic, ID, and start time</strong> — provided by Zoom webhook.</li>
+</ul>
+
+<h3>2.3 Generated data (after the meeting)</h3>
+<ul>
+  <li><strong>Transcript</strong> — produced by Groq Whisper Large v3 from the audio.</li>
+  <li><strong>Summary, action items, decisions</strong> — produced by Anthropic Claude Haiku from the transcript.</li>
+</ul>
+
+<h2>3. What we do not collect</h2>
+<ul>
+  <li>We do not collect video.</li>
+  <li>We do not collect screen share content (recording configured for audio only).</li>
+  <li>We do not access your Zoom account beyond what OAuth scopes explicitly allow (see §6).</li>
+  <li>We do not access your other Google data — only Calendar events you explicitly grant.</li>
+  <li>We do not collect device fingerprints, cookies for tracking, or analytics.</li>
+</ul>
+
+<h2>4. Where data lives and for how long</h2>
+<table style="border-collapse: collapse; width: 100%; margin: 12px 0;">
+  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;"><strong>Data</strong></td><td><strong>Location</strong></td><td><strong>Retention</strong></td></tr>
+  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">Audio recording</td><td>Cloudflare R2 (EU)</td><td>Deleted within 24 hours after transcription</td></tr>
+  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">Transcript &amp; summary</td><td>Your own GitHub repo</td><td>Until you delete it</td></tr>
+  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">OAuth tokens</td><td>Cloudflare KV (encrypted, EU)</td><td>Until you revoke access</td></tr>
+  <tr><td style="padding: 8px 0;">Zoom webhook payloads</td><td>Cloudflare KV (EU)</td><td>30 days</td></tr>
+</table>
+
+<h2>5. Third parties (sub-processors)</h2>
+<ul>
+  <li><strong>Cloudflare</strong> (Workers, R2, KV) — hosting and storage of audio + tokens. Data resides in EU. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare privacy</a>.</li>
+  <li><strong>Groq</strong> — speech-to-text transcription. Audio is sent to Groq for processing. Groq's policy explicitly forbids training on customer data. <a href="https://groq.com/privacy-policy/" target="_blank">Groq privacy</a>.</li>
+  <li><strong>Anthropic</strong> — Claude API generates the summary. Anthropic does not train on API inputs by default. <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic privacy</a>.</li>
+  <li><strong>Hetzner</strong> (Germany) — VPS that runs the bot infrastructure. <a href="https://www.hetzner.com/legal/privacy-policy/" target="_blank">Hetzner privacy</a>.</li>
+  <li><strong>GitHub</strong> — your own repo where notes are stored. You control access.</li>
+  <li><strong>Telegram</strong> — only if you opt in for notifications. We send you a chat message; nothing more.</li>
+</ul>
+
+<h2>6. Zoom OAuth scopes</h2>
+<p>The Service requests the minimum scopes required to function:</p>
+<ul>
+  <li><code>meeting:read:meeting</code> — read meeting metadata (join URL, password) when a meeting starts.</li>
+  <li><code>user:read:user</code> — read your name and email so we can identify your account.</li>
+</ul>
+<p>The Service does not request scopes for creating, modifying, or deleting meetings, nor for reading other users' data.</p>
+
+<h2>7. Your rights (GDPR, CCPA)</h2>
+<ul>
+  <li><strong>Access:</strong> request a copy of all data we hold about you.</li>
+  <li><strong>Deletion:</strong> request deletion of all data. We comply within 30 days.</li>
+  <li><strong>Export:</strong> your meeting notes are already in your own GitHub repo as plain Markdown — fully exportable.</li>
+  <li><strong>Revoke access:</strong> uninstall Get Context from <a href="https://marketplace.zoom.us/" target="_blank">Zoom Marketplace</a>. Tokens are deleted within 24 hours.</li>
+</ul>
+<p>To exercise any of these rights, write to <a href="mailto:akhomich.backup@gmail.com">akhomich.backup@gmail.com</a>.</p>
+
+<h2>8. Security</h2>
+<ul>
+  <li>All data in transit uses TLS 1.2 or higher.</li>
+  <li>OAuth tokens are encrypted at rest in Cloudflare KV.</li>
+  <li>Webhook authenticity is verified via HMAC-SHA256.</li>
+  <li>Audio recordings are deleted within 24 hours of transcription.</li>
+  <li>The Operator is the only person with administrative access to the infrastructure.</li>
+</ul>
+
+<h2>9. Children</h2>
+<p>The Service is not intended for users under 16. We do not knowingly collect data from minors. If you believe a minor has used the Service, contact us and we will delete their data.</p>
+
+<h2>10. Changes to this policy</h2>
+<p>If this policy changes materially, we will notify connected users via Telegram and email at least 30 days before the change takes effect. The "Last updated" date at the top reflects the most recent revision.</p>
+
+<h2>11. Contact</h2>
+<p>For privacy questions, data access requests, or deletion requests, contact <a href="mailto:akhomich.backup@gmail.com">akhomich.backup@gmail.com</a>. We respond within 5 business days.</p>
+
+<footer>
+  © 2026 Aleksandr Khomich · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/support">Support</a>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get Context — Meeting notes that stay with you</title>
+<meta name="description" content="Get Context joins your Zoom meetings, transcribes them, and turns them into searchable notes you actually use. Built for people who run a lot of meetings and remember none of them.">
+<style>
+  :root {
+    --fg: #111;
+    --muted: #666;
+    --accent: #2c5cff;
+    --bg: #fafafa;
+    --card: #fff;
+    --border: #eaeaea;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+  header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  nav a { color: var(--muted); text-decoration: none; margin-left: 24px; font-size: 14px; }
+  nav a:hover { color: var(--fg); }
+  h1 { font-size: 44px; line-height: 1.15; margin: 0 0 24px; letter-spacing: -0.025em; }
+  .lead { font-size: 19px; color: var(--muted); margin-bottom: 40px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+  h2 { font-size: 22px; margin: 0 0 12px; letter-spacing: -0.015em; }
+  ul { padding-left: 18px; margin: 8px 0 0; }
+  li { margin-bottom: 6px; }
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 13px; color: var(--muted); }
+  footer a { color: var(--muted); }
+  .pill { display: inline-block; padding: 4px 10px; background: #eef2ff; color: var(--accent); border-radius: 999px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">Get Context</div>
+  <nav>
+    <a href="/docs">Docs</a>
+    <a href="/privacy">Privacy</a>
+    <a href="/terms">Terms</a>
+    <a href="/support">Support</a>
+  </nav>
+</header>
+
+<span class="pill">Beta — invitation only</span>
+<h1>Meeting notes that stay with you.</h1>
+<p class="lead">Get Context joins your Zoom meetings, transcribes them with Groq Whisper, and turns each call into a searchable note in your private knowledge base. Built for people who run a lot of meetings and remember none of them.</p>
+
+<div class="card">
+  <h2>What it does</h2>
+  <ul>
+    <li>Joins any Zoom meeting you host or are invited to (after Marketplace approval).</li>
+    <li>Records audio, transcribes with Groq Whisper Large v3.</li>
+    <li>Generates a TL;DR, action items, decisions, and open questions using Claude.</li>
+    <li>Writes the result into your private GitHub repo as Markdown — yours forever.</li>
+    <li>Sends you a Telegram notification when notes are ready.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>What it doesn't do</h2>
+  <ul>
+    <li>Sell or share your meeting data with anyone.</li>
+    <li>Train models on your conversations.</li>
+    <li>Keep audio after transcription. The recording is deleted once notes are written.</li>
+    <li>Touch your existing files without explicit permission.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Who built this</h2>
+  <p>Get Context is built and operated by Aleksandr Khomich for personal use and a small group of beta testers. It is not a SaaS company. There is no marketing department. If you reach <a href="/support">support</a>, you are talking to me directly.</p>
+</div>
+
+<footer>
+  © 2026 Aleksandr Khomich · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/support">Support</a>
+</footer>
+
+</div>
+</body>
+</html>
