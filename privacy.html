@@ -77,7 +77,7 @@
 <h2>4. Where data lives and for how long</h2>
 <table style="border-collapse: collapse; width: 100%; margin: 12px 0;">
   <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;"><strong>Data</strong></td><td><strong>Location</strong></td><td><strong>Retention</strong></td></tr>
-  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">Audio recording</td><td>Cloudflare R2 (EU)</td><td>Deleted within 24 hours after transcription</td></tr>
+  <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">Meeting audio</td><td>In-memory buffer on the Hetzner sidecar (Germany) for the duration of the meeting; never persisted to disk in production</td><td>Buffer is cleared immediately after Groq transcription returns (typically &lt;2 minutes after meeting end)</td></tr>
   <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">Transcript &amp; summary</td><td>Your own GitHub repo</td><td>Until you delete it</td></tr>
   <tr style="border-bottom: 1px solid #eaeaea;"><td style="padding: 8px 0;">OAuth tokens</td><td>Cloudflare KV (encrypted, EU)</td><td>Until you revoke access</td></tr>
   <tr><td style="padding: 8px 0;">Zoom webhook payloads</td><td>Cloudflare KV (EU)</td><td>30 days</td></tr>
@@ -85,7 +85,7 @@
 
 <h2>5. Third parties (sub-processors)</h2>
 <ul>
-  <li><strong>Cloudflare</strong> (Workers, R2, KV) — hosting and storage of audio + tokens. Data resides in EU. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare privacy</a>.</li>
+  <li><strong>Cloudflare</strong> (Workers, KV) — Worker runtime, OAuth token storage, webhook payload deduplication. Data resides in EU. R2 storage is retained as a legacy audio-backup destination for the deprecated Meeting SDK flow and is unused for RTMS captures. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank">Cloudflare privacy</a>.</li>
   <li><strong>Groq</strong> — speech-to-text transcription. Audio is sent to Groq for processing. Groq's policy explicitly forbids training on customer data. <a href="https://groq.com/privacy-policy/" target="_blank">Groq privacy</a>.</li>
   <li><strong>Anthropic</strong> — Claude API generates the summary. Anthropic does not train on API inputs by default. <a href="https://www.anthropic.com/privacy" target="_blank">Anthropic privacy</a>.</li>
   <li><strong>Hetzner</strong> (Germany) — VPS that runs the bot infrastructure. <a href="https://www.hetzner.com/legal/privacy-policy/" target="_blank">Hetzner privacy</a>.</li>
@@ -96,9 +96,12 @@
 <h2>6. Zoom OAuth scopes</h2>
 <p>The Service requests the minimum scopes required to function:</p>
 <ul>
-  <li><code>meeting:read:meeting</code> — read meeting metadata (join URL, password) when a meeting starts.</li>
   <li><code>user:read:user</code> — read your name and email so we can identify your account.</li>
-  <li><code>user:read:zak</code> — fetch a short-lived Zoom Access Key per meeting so the bot can join meetings you are invited to (per Zoom's March 2, 2026 authorization policy). The ZAK is used immediately and not stored.</li>
+  <li><code>user:read:zak</code> — fetch a short-lived Zoom Access Key (legacy fallback for the few corner cases not covered by RTMS). The ZAK is used immediately and not stored.</li>
+  <li><code>meeting:read:meeting</code> — read meeting metadata when a meeting starts.</li>
+  <li><code>meeting:read:meeting_audio</code> — receive the meeting's audio stream over Zoom RTMS.</li>
+  <li><code>rtms:read:rtms_started</code> — be notified by Zoom when an RTMS stream becomes available.</li>
+  <li><code>rtms:read:rtms_stopped</code> — be notified by Zoom when an RTMS stream ends.</li>
 </ul>
 <p>The Service does not request scopes for creating, modifying, or deleting meetings, nor for reading other users' data.</p>
 
